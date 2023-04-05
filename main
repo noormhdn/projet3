@@ -1,1 +1,71 @@
 
+
+
+# importation des modules
+import math
+import numpy as np
+import matplotlib.pyplot as plt
+import time
+
+# données de sortie importées des fichiers PA
+
+AccX = LSM6DSL.readACCx()
+AccY = LSM6DSL.readACCy()
+AccZ = LSM6DSL.readACCz()
+
+GyrX = LSM6DSL.readGYRx()
+GyrY = LSM6DSL.readGYRy()
+GyrZ = LSM6DSL.readGYRz()
+
+# 
+
+temps_ecoule = 1 # en sec
+
+# étape 1 : conversion des accélérations g en unités SI
+# on utilisera que des unités SI dans ce projet
+
+def convert_acceleration_to_ms2(x_acc, y_acc, z_acc):
+    """
+    convertit les accélérations selon x, y et z en g en m/s^2.
+    """
+    g = 9.81 # gravité en m/s^2
+    x_acc_ms2 = x_acc * g
+    y_acc_ms2 = y_acc * g
+    z_acc_ms2 = z_acc * g
+    return x_acc_ms2, y_acc_ms2, z_acc_ms2
+
+
+AccX_ms2, AccY_ms2, AccZ_ms2 = convert_acceleration_to_ms2(AccX, AccY, AccZ)
+
+# étape 2 : utilisation de la fonction atan2 pour les angles de tangage (theta) et de roulis (phi)
+
+theta = math.atan2(x_acc_ms2, math.sqrt(y_acc_ms2**2+z_acc_ms2**2))
+phi = math.atan2(y_acc_ms2, math.sqrt(x_acc_ms2**2+z_acc_ms2**2))
+
+# étape 3 : conversion des données du gyroscope de deg/s en rad/s
+
+import math
+
+def deg_to_rad(data):
+    """
+    convertit les données du gyroscope en deg/s à rad/s.
+    """
+    return tuple(math.radians(d) for d in data)
+
+gyro_data = (GyrX,GyrY,GyrZ)
+rad_data = deg_to_rad(gyro_data)
+
+# étape 4 : intégration sur le temps de mesure des données du gyroscope pour obtenir angle de lacet
+
+def angle_lacet(GyrX, GyrY, GyrZ, temps_ecoule):
+
+    # on utilise les mesures de gyro en deg/s
+    # intégration des mesures de gyro pour obtenir l'angle de lacet
+
+    psi_deg = GyrZ * temps_ecoule
+
+    # Conversion de l'angle en radians
+
+    psi = angle_lacet_deg * math.pi / 180
+
+    return angle_lacet

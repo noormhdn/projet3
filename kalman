@@ -1,9 +1,11 @@
 
 
-
 # importation des modules
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.integrate import odeint
 import time
 
+# à copier de l'autre fichier
+# revoir la matrice covariance??????
